@@ -21,10 +21,14 @@ app.get('/verify', (req, res) => {
   const user = validTokens[token];
   
   if (user) {
+    // BREAKING CHANGE: New response structure!
     res.json({
       valid: true,
-      userId: user.userId,
-      username: user.username
+      user: {
+        id: user.userId,
+        name: user.username,
+        email: `${user.username}@example.com`
+      }
     });
   } else {
     res.status(401).json({

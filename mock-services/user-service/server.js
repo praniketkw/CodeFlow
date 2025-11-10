@@ -29,11 +29,10 @@ async function verifyToken(req, res, next) {
       headers: { Authorization: token }
     });
 
-    // IMPORTANT: We expect this exact structure from auth-service
-    // If auth-service changes this, user-service BREAKS!
+    // FIXED: Updated to match new auth-service response structure
     if (response.data.valid) {
-      req.userId = response.data.userId;  // ← We depend on "userId" field
-      req.username = response.data.username;
+      req.userId = response.data.user.id;  // ← Fixed: now uses user.id
+      req.username = response.data.user.name;  // ← Fixed: now uses user.name
       next();
     } else {
       res.status(401).json({ error: 'Invalid token' });

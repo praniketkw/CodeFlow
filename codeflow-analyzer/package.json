@@ -1,0 +1,15 @@
+{
+  "name": "codeflow-analyzer",
+  "version": "1.0.0",
+  "description": "AI-powered dependency analyzer for microservices",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "analyze": "node src/analyzer.js",
+    "test": "node src/test-analyzer.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.27.0",
+    "dotenv": "^16.3.1"
+  }
+}
