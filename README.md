@@ -1,196 +1,173 @@
-# CodeFlow 🚀
+# CodeFlow
 
-**AI-Powered Autonomous Dependency Management for Microservices**
+**AI-Powered Microservice Dependency Manager**
 
-CodeFlow automatically detects breaking changes in microservices, finds all affected services, generates fixes using AI, and creates Pull Requests - all without human intervention.
+Ever changed one service and watched 50 others break in production? CodeFlow catches breaking changes before they happen, figures out what needs fixing, and creates the PRs for you.
 
-## 🎯 The Problem
+## The Problem
 
-In enterprises with 100+ microservices:
-- One service changes its API → 50 dependent services break
-- Nobody knows what will break until production goes down
-- Hours wasted debugging cascading failures
-- Days coordinating fixes across teams
+Working with lots of microservices is painful:
+- Change one API, break everything downstream
+- Spend hours tracking down which services are affected
+- Manually fix the same issue across dozens of repos
+- Coordinate deployments across multiple teams
 
-## ✨ The Solution
+I built this because I was tired of seeing production go down from simple API changes.
 
-CodeFlow uses AI to:
-1. **Detect breaking changes** semantically (not just version bumps)
-2. **Find all dependent services** automatically
-3. **Generate exact fixes** using Claude AI
-4. **Create PRs automatically** with full analysis and fixes
-5. **Coordinate deployments** safely
+## What CodeFlow Does
 
-## 🎬 Live Demo
+It's pretty straightforward:
+1. Watches for API changes in your services
+2. Uses AI to understand what actually changed (not just version numbers)
+3. Finds every service that depends on the changed API
+4. Writes the fix and opens a PR
+5. You review and merge when ready
 
-We built a real example:
-1. **auth-service** changed its API response structure
-2. **user-service** broke (couldn't find `userId` anymore)
-3. **CodeFlow detected it**, analyzed the change, generated the fix
-4. **Auto-created PR** with the solution
-5. **Merged and fixed** - services working again!
+## See It Work
 
-Check out [PR #1](https://github.com/praniketkw/CodeFlow/pull/1) to see it in action!
+I set up a real example with two services:
+- **auth-service** returns user tokens
+- **user-service** depends on auth-service to verify users
 
-## 🏗️ Project Structure
+Then I changed auth-service's response format (moved `userId` to `user.id`). User-service broke immediately.
+
+CodeFlow caught it, wrote the fix, and opened [PR #1](https://github.com/praniketkw/CodeFlow/pull/1) automatically. Check it out to see the full analysis and fix.
+
+## Project Structure
 
 ```
 CodeFlow/
-├── mock-services/          # Example microservices
-│   ├── auth-service/       # Authentication service (port 3001)
-│   └── user-service/       # User management (port 3002)
-├── codeflow-analyzer/      # The AI-powered analyzer
+├── mock-services/          # Two example services to test with
+│   ├── auth-service/       # Handles authentication
+│   └── user-service/       # Manages users, depends on auth
+├── codeflow-analyzer/      # The main tool
 │   ├── src/
-│   │   ├── analyzer.js           # AI code analysis
-│   │   ├── github-integration.js # PR automation
-│   │   └── auto-fix-demo.js      # Complete workflow
-│   └── GITHUB_SETUP.md     # Setup instructions
-└── docs/                   # Learning materials
+│   │   ├── analyzer.js           # Detects changes with AI
+│   │   ├── github-integration.js # Creates PRs
+│   │   └── auto-fix-demo.js      # Runs the full workflow
+│   └── GITHUB_SETUP.md     # How to set up GitHub access
+└── docs/                   # Explains how everything works
 ```
 
-## 🚀 Quick Start
+## Getting Started
 
-### Prerequisites
-- Node.js 18+
-- Anthropic API key
-- GitHub Personal Access Token
+You'll need:
+- Node.js (version 18 or higher)
+- An Anthropic API key (for the AI analysis)
+- A GitHub token (to create PRs)
 
 ### Setup
 
-1. **Clone the repo**
+Clone and install:
 ```bash
 git clone https://github.com/praniketkw/CodeFlow.git
-cd CodeFlow
-```
-
-2. **Install dependencies**
-```bash
-cd codeflow-analyzer
+cd CodeFlow/codeflow-analyzer
 npm install
 ```
 
-3. **Configure API keys**
+Add your API keys:
 ```bash
 cp .env.example .env
-# Add your keys to .env:
+# Edit .env and add:
 # ANTHROPIC_API_KEY=your_key
 # GITHUB_TOKEN=your_token
 ```
 
-4. **Run the analyzer**
+Run it:
 ```bash
-npm run test        # Test analysis only
-npm run auto-fix    # Full workflow with PR creation
+npm run test        # Just analyze changes
+npm run auto-fix    # Full workflow with PR
 ```
 
-## 🎓 How It Works
+## How It Works
 
-### Step 1: Detect Breaking Changes
+**Step 1: Detect the change**
 ```javascript
-// AI analyzes code changes
 const analysis = await analyzeCodeChange(oldCode, newCode, 'auth-service');
-// Returns: "Breaking change detected - userId moved to user.id"
+// AI figures out: "userId moved to user.id"
 ```
 
-### Step 2: Find Dependent Services
+**Step 2: Find affected services**
 ```javascript
-// Scans all services for dependencies
 const dependents = findDependentServices('/verify', './mock-services');
-// Returns: ['user-service', 'order-service', ...]
+// Scans code to find who calls this API
 ```
 
-### Step 3: Generate Fixes
+**Step 3: Generate the fix**
 ```javascript
-// AI generates exact code changes
 const fix = await generateFix(serviceCode, analysis, 'user-service');
-// Returns: "Change response.data.userId to response.data.user.id"
+// AI writes: "Change response.data.userId to response.data.user.id"
 ```
 
-### Step 4: Create PR
+**Step 4: Create the PR**
 ```javascript
-// Automatically creates PR with fixes
 await autoFixWorkflow(serviceName, filePath, oldCode, newCode, analysis, fix);
-// Creates branch, commits, pushes, opens PR
+// Makes a branch, commits the fix, opens a PR
 ```
 
-## 🧪 Testing It Yourself
+## Try It Out
 
-1. **Start the services**
+Start both services:
 ```bash
 cd mock-services/auth-service && npm install && npm start &
 cd mock-services/user-service && npm install && npm start &
 ```
 
-2. **Test the working system**
+Make sure they work:
 ```bash
 curl http://localhost:3002/profile -H "Authorization: token123"
 ```
 
-3. **Make a breaking change** in auth-service
-
-4. **Run CodeFlow**
+Change something in auth-service that breaks the API, then run:
 ```bash
 cd codeflow-analyzer
 npm run auto-fix
 ```
 
-5. **Check your GitHub repo** for the auto-generated PR!
+CodeFlow will detect the issue, write a fix, and open a PR in your repo.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-- **AI**: Anthropic Claude (Haiku) for code analysis
-- **GitHub**: Octokit for PR automation
-- **Git**: simple-git for version control
-- **Node.js**: Express for microservices
-- **JavaScript**: ES modules
+- Claude AI (Haiku) for understanding code changes
+- Octokit for GitHub integration
+- Express for the mock services
+- Node.js with ES modules
 
-## 📊 What We Built
+## What's Built
 
-✅ Mock microservices with real dependencies  
-✅ AI-powered semantic change detection  
-✅ Automatic dependent service discovery  
-✅ AI-generated code fixes  
-✅ GitHub PR automation  
-✅ Complete end-to-end workflow  
+- Two working microservices with real dependencies
+- AI that understands code changes semantically
+- Automatic scanning to find affected services
+- Fix generation that writes actual code
+- GitHub integration that creates PRs
+- End-to-end workflow from detection to fix
 
-## 🎯 Future Enhancements
+## What's Next
 
-- [ ] Webhook automation (auto-run on commits)
-- [ ] Dependency graph visualization
-- [ ] Multi-repo support (separate repositories)
-- [ ] Testing integration (auto-test fixes)
-- [ ] Web dashboard
-- [ ] Deployment orchestration
-- [ ] Rollback automation
+Some ideas I'm thinking about:
+- Run automatically on every commit (webhooks)
+- Visual dependency graph
+- Support for multiple separate repos
+- Auto-test the fixes before creating PRs
+- Web UI to see everything
+- Smart deployment ordering
 
-## 📚 Learning Resources
+## More Info
 
-Check out the `docs/` folder for detailed explanations:
-- `01-microservices-basics.md` - Understanding microservices
-- `02-how-auth-service-works.md` - Deep dive into auth service
-- `03-service-dependencies.md` - How services depend on each other
-- `04-the-breaking-change.md` - The problem CodeFlow solves
+The `docs/` folder has detailed write-ups if you want to understand how everything works:
+- How microservices communicate
+- Why dependencies break
+- How the AI analysis works
+- The full breaking change scenario
 
-## 🤝 Contributing
+## Contributing
 
-This is a learning project! Feel free to:
-- Add more mock services
-- Improve the AI prompts
-- Add new features
-- Create issues and PRs
+This started as a learning project, but if you want to add features or fix bugs, go for it. PRs welcome.
 
-## 📝 License
+## License
 
-MIT License - feel free to use this for learning!
-
-## 🙏 Acknowledgments
-
-Built as a learning project to understand:
-- Microservice architecture
-- AI-powered developer tools
-- GitHub automation
-- Dependency management at scale
+MIT - do whatever you want with it.
 
 ---
 
-**Built with ❤️ using Claude AI and lots of coffee ☕**
+Built to solve a real problem I kept running into with microservices.
