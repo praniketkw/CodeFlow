@@ -6,10 +6,13 @@
   "type": "module",
   "scripts": {
     "analyze": "node src/analyzer.js",
-    "test": "node src/test-analyzer.js"
+    "test": "node src/test-analyzer.js",
+    "auto-fix": "node src/auto-fix-demo.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.0",
-    "dotenv": "^16.3.1"
+    "@octokit/rest": "^20.0.2",
+    "dotenv": "^16.3.1",
+    "simple-git": "^3.20.0"
   }
 }
