@@ -1,8 +1,15 @@
 # CodeFlow
 
-**AI-Powered Microservice Dependency Manager**
+**AI-Powered Cross-Repo Dependency Manager**
 
 Ever changed one service and watched 50 others break in production? CodeFlow catches breaking changes before they happen, figures out what needs fixing, and creates the PRs for you.
+
+```
+Breaking Change Detected → Analyze Impact → Generate Fixes → Create PRs
+     (AI Analysis)      (Dependency Graph)   (AI Generation)  (Automation)
+```
+
+**New**: Now supports multiple repositories with dependency graph visualization and batch PR creation.
 
 ## The Problem
 
@@ -51,33 +58,35 @@ CodeFlow/
 
 ## Getting Started
 
-You'll need:
-- Node.js (version 18 or higher)
-- An Anthropic API key (for the AI analysis)
-- A GitHub token (to create PRs)
+### Quick Start
 
-### Setup
+See [QUICK_START.md](QUICK_START.md) for a 5-minute setup guide.
 
-Clone and install:
+**TL;DR:**
 ```bash
-git clone https://github.com/praniketkw/CodeFlow.git
-cd CodeFlow/codeflow-analyzer
+cd codeflow-analyzer
 npm install
-```
-
-Add your API keys:
-```bash
 cp .env.example .env
-# Edit .env and add:
-# ANTHROPIC_API_KEY=your_key
-# GITHUB_TOKEN=your_token
+# Add your API keys to .env
+npm run test        # Single-repo demo
+npm run cross-repo  # Multi-repo analysis
+npm run dashboard   # Launch web UI
 ```
 
-Run it:
-```bash
-npm run test        # Just analyze changes
-npm run auto-fix    # Full workflow with PR
-```
+### Requirements
+
+- Node.js 18+
+- Anthropic API key ([Get one](https://console.anthropic.com/))
+- GitHub token ([Get one](https://github.com/settings/tokens))
+
+### Documentation
+
+- 📖 [Quick Start Guide](QUICK_START.md) - Get running in 5 minutes
+- 🔗 [Cross-Repo Guide](codeflow-analyzer/CROSS_REPO_GUIDE.md) - Multi-repo setup
+- 🏗️ [Architecture](docs/05-cross-repo-architecture.md) - How it works
+- 🎤 [Demo Script](codeflow-analyzer/DEMO_SCRIPT.md) - For presentations
+- 💼 [Employer Pitch](EMPLOYER_PITCH.md) - Talking points
+- 📚 [Full Documentation Index](DOCUMENTATION_INDEX.md) - All docs organized
 
 ## How It Works
 
@@ -135,6 +144,7 @@ CodeFlow will detect the issue, write a fix, and open a PR in your repo.
 
 ## What's Built
 
+### Core Features
 - Two working microservices with real dependencies
 - AI that understands code changes semantically
 - Automatic scanning to find affected services
@@ -142,15 +152,24 @@ CodeFlow will detect the issue, write a fix, and open a PR in your repo.
 - GitHub integration that creates PRs
 - End-to-end workflow from detection to fix
 
+### Cross-Repo Capabilities (NEW!)
+- **Multi-repository management**: Configure and sync multiple repos
+- **Dependency graph builder**: Visualize cross-repo dependencies
+- **Batch analysis**: Detect breaking changes across all repos
+- **Automated PR creation**: Generate fixes and create PRs in multiple repos
+- **Web dashboard**: Monitor repositories and dependencies in real-time
+- **Scalable architecture**: Built to handle enterprise-scale deployments
+
+See [CROSS_REPO_GUIDE.md](codeflow-analyzer/CROSS_REPO_GUIDE.md) for details.
+
 ## What's Next
 
 Some ideas I'm thinking about:
 - Run automatically on every commit (webhooks)
-- Visual dependency graph
-- Support for multiple separate repos
 - Auto-test the fixes before creating PRs
-- Web UI to see everything
 - Smart deployment ordering
+- AST-based code transformation
+- Parallel analysis for faster processing
 
 ## More Info
 
@@ -167,6 +186,25 @@ This started as a learning project, but if you want to add features or fix bugs,
 ## License
 
 MIT - do whatever you want with it.
+
+---
+
+## Quick Reference
+
+| Task | Command | Documentation |
+|------|---------|---------------|
+| Get started | `npm run test` | [QUICK_START.md](QUICK_START.md) |
+| Multi-repo setup | `npm run setup` | [CROSS_REPO_GUIDE.md](codeflow-analyzer/CROSS_REPO_GUIDE.md) |
+| Run analysis | `npm run cross-repo` | [CROSS_REPO_GUIDE.md](codeflow-analyzer/CROSS_REPO_GUIDE.md) |
+| Launch dashboard | `npm run dashboard` | Open http://localhost:3000 |
+| Prepare demo | Read [DEMO_SCRIPT.md](codeflow-analyzer/DEMO_SCRIPT.md) | For presentations |
+| Interview prep | Read [EMPLOYER_PITCH.md](EMPLOYER_PITCH.md) | Talking points |
+
+## Project Status
+
+✅ **Working**: Single-repo analysis, multi-repo management, dependency graphs, PR automation, web dashboard
+🚧 **Next**: Webhook integration, automated testing, deployment coordination
+📚 **Documented**: Comprehensive guides for setup, usage, and architecture
 
 ---
 

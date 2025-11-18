@@ -7,7 +7,10 @@
   "scripts": {
     "analyze": "node src/analyzer.js",
     "test": "node src/test-analyzer.js",
-    "auto-fix": "node src/auto-fix-demo.js"
+    "auto-fix": "node src/auto-fix-demo.js",
+    "cross-repo": "node src/cross-repo-demo.js",
+    "dashboard": "node src/dashboard/server.js",
+    "setup": "node src/setup-cross-repo.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.0",

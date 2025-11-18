@@ -3,3 +3,7 @@ node_modules/
 *.log
 .env
 .vscode/
+# CodeFlow workspace
+.codeflow-workspace/
+cross-repo-analysis-report.json
+analysis-history.json

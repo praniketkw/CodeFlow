@@ -1,0 +1,48 @@
+{
+  "repositories": [
+    {
+      "name": "auth-service",
+      "url": "https://github.com/YOUR_ORG/auth-service.git",
+      "type": "provider",
+      "apis": [
+        {
+          "endpoint": "/verify",
+          "method": "GET",
+          "description": "Verify authentication token"
+        }
+      ]
+    },
+    {
+      "name": "user-service",
+      "url": "https://github.com/YOUR_ORG/user-service.git",
+      "type": "consumer",
+      "dependencies": [
+        {
+          "service": "auth-service",
+          "endpoint": "/verify"
+        }
+      ]
+    },
+    {
+      "name": "order-service",
+      "url": "https://github.com/YOUR_ORG/order-service.git",
+      "type": "consumer",
+      "dependencies": [
+        {
+          "service": "auth-service",
+          "endpoint": "/verify"
+        }
+      ]
+    }
+  ],
+  "scanPatterns": {
+    "apiCalls": [
+      "axios.get",
+      "axios.post",
+      "fetch\\(",
+      "http.get",
+      "request\\("
+    ],
+    "fileExtensions": [".js", ".ts", ".jsx", ".tsx"]
+  }
+}
