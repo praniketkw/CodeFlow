@@ -262,4 +262,4 @@ For REST clients:
 
 ---
 
-Need help? See [CROSS_REPO_GUIDE.md](../CROSS_REPO_GUIDE.md)
+Need help? Check the main README.md for more information.
